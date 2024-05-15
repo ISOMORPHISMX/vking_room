@@ -1,5 +1,6 @@
 .vscode/
 build/
 doxygen_file/
-figures/
+
 !figures/*.svg
+figures/
