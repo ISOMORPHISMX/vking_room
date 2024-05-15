@@ -2,5 +2,5 @@
 build/
 doxygen_file/
 
+*.vsdx
 !figures/*.svg
-figures/
