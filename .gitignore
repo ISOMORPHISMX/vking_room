@@ -3,3 +3,4 @@ build/
 doxygen_file/
 
 *.vsdx
+*.~vsdx
