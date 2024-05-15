@@ -1,0 +1,51 @@
+cmake_minimum_required (VERSION 3.10)
+set(CMAKE_CXX_STANDARD 17)
+project ( viking_room )
+
+# 添加包含目录
+set( MY_INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
+# 寻找 Vulkan 头文件和库文件
+find_package(Vulkan REQUIRED)
+
+# 寻找 GLFW 头文件和库文件
+set(GLFW_DIR ${MY_INCLUDE_DIRECTORY}/glfw)
+set(GLFW_LIB ${GLFW_DIR}/lib)
+
+# 寻找 glm 头文件
+set(GLM_DIR ${MY_INCLUDE_DIRECTORY}/glm)
+
+
+# 寻找 tinyobjloader 头文件
+set(TOL_DIR ${MY_INCLUDE_DIRECTORY}/tinyobjloader)
+
+# 寻找 stb_image 头文件
+set(STB_DIR ${MY_INCLUDE_DIRECTORY}/stb)
+message( ${STB_DIR} )
+
+#添加库寻找目录
+include_directories( ${TOL_DIR} ${STB_DIR} ${Vulkan_INCLUDE_DIRS} ${GLFW_DIR} ${GLM_DIR} )
+
+#添加库查找目录
+link_directories( ${GLFW_LIB} ${Vulkan_LIBRARIES} )
+message( ${Vulkan_LIBRARIES} )
+message( ${Vulkan_INCLUDE_DIRS} )
+
+add_executable( ${PROJECT_NAME} hello_triangle.cpp hello_triangle.hpp )
+
+target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan glfw3 )
+#target_link_directories( ${PROJECT_NAME} PUBLIC ${Vulkan_LIBRARIES} ${GLFW_LIB} )
+#target_include_directories( ${PROJECT_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS} )
+
+# 拷贝文件夹及其文件到指定目录
+# 添加一个自定义命令，将 models 和 textures 文件夹复制到目标目录
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_CURRENT_SOURCE_DIR}/models" "${CMAKE_CURRENT_BINARY_DIR}/Debug/models"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_CURRENT_SOURCE_DIR}/textures" "${CMAKE_CURRENT_BINARY_DIR}/Debug/textures"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_CURRENT_SOURCE_DIR}/shaders" "${CMAKE_CURRENT_BINARY_DIR}/Debug/shaders"
+)
+
+
